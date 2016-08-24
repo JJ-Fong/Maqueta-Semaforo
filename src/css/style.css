@@ -1,0 +1,49 @@
+.frame {
+	background-color: black;
+	position: relative; 
+	height: 550px;
+	width: 200px;
+}
+
+.red-on {
+	background-color: #ff0000;
+	top: 25px;
+}
+
+.red-off {
+	background-color: #6f0404;
+	top: 25px;
+}
+
+.yellow-on {
+	background-color: #ffff00;
+	top: 200px;
+}
+
+.yellow-off {
+	background-color: #909001;
+	top: 200px;
+}
+
+.green-on {
+	background-color: #36f736;
+	top: 375px;
+}
+
+.green-off {
+	background-color: #007600;
+	top: 375px;
+}
+
+.light {
+	position: absolute;
+	border-radius: 100%;
+	height: 150px;
+	width: 150px;
+	left: 25px;
+}
+
+button{
+	position: absolute;
+	top: 555px;
+}

@@ -4,105 +4,61 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 
-// Javascript the good parts
-
-const Counter = ({ value, incrementAction, decrementAction, removeAction }) => (
-  <div>
-    <h1>{ value }</h1>
-    <button onClick={ incrementAction }>+</button>
-    <button onClick={ decrementAction }>-</button>
-    <button onClick={ removeAction }>x</button>
-  </div>
-);
-
-const CounterList = ({ list }) => (
-  <div>
-    {
-      list.map(
-        (value, i) => (
-          <Counter
-            key={ i }
-            value={ value }
-            index={ i }
-            incrementAction={
-              () => store.dispatch({
-                type: 'INCREMENT',
-                payload: { index: i }
-              })
-            }
-            decrementAction={
-              () => store.dispatch({
-                type: 'DECREMENT',
-                payload: { index: i }
-              })
-            }
-            removeAction={
-              () => store.dispatch({
-                type: 'REMOVE_COUNTER',
-                payload: {
-                  index: i
-                }
-              })
-            }
-          />
-        )
-      )
-    }
-    <button onClick={ () => store.dispatch({ type: 'ADD_COUNTER' }) }>Add counter</button>
-  </div>
-);
-
-const validateIndex = (index, list) => 0 <= index && index < list.size;
-
-// Reducer
-const counterList = (state = Immutable.List.of(), action) => {
-
-  if(typeof action.payload !== 'undefined'){
-    var { index } = action.payload;
+const Semaforo = ({ value }) => {
+  var red = (<div class="red-off light "></div>);
+  var yellow = (<div class="yellow-off light"></div>);
+  var green = (<div class="green-off light"></div>);
+  
+  if (value === 0) {
+    red = (<div class="red-on light "></div>);
   }
+  if (value === 1) {
+    yellow = (<div class="yellow-on light "></div>);
+  }
+  if (value === 2) {
+    green = (<div class="green-on light "></div>);
+  }
+  
+  return (
+  <div class="frame"> 
+    {red}
+    {yellow}
+    {green}
+    <button onClick = { logic }>CHANGE</button> 
+  </div> );
+};
 
-  switch(action.type){
-    case 'ADD_COUNTER':
-      return state.push(0);
-
-    case 'REMOVE_COUNTER':
-
-      if(validateIndex(index, state)){
-        return state.delete(index);
-      }
-
-      return state;
-
+const tlight = (state = 0, action) => {
+  switch (action.type) {
     case 'INCREMENT':
-
-      if(validateIndex(index, state)){
-        return state.update(index, (v) => v + 1);
-      }
-
-      return state;
-
-    case 'DECREMENT':
-
-      if(validateIndex(index, state)){
-        return state.update(index,  (v) => v - 1);
-      }
-
-      return state;
-
+      return state + 1;
+    case 'RESET':
+      return 0;
     default:
-      return state;
+      return 0;
   }
 }
 
-// createStore: reducer --> store
-const store = createStore(counterList);
+const store = createStore(tlight);
+
+const logic = () => {
+  if (store.getState() < 2){
+    store.dispatch({type: 'INCREMENT'});
+  } else {
+    store.dispatch({type: 'RESET'});
+  }
+
+}
 
 const render = () => {
   ReactDOM.render(
-    <CounterList list={ store.getState() } />,
+    <Semaforo value={store.getState()} />,
     document.getElementById('root')
   )
 }
 
-store.subscribe(render);
+store.subscribe(render); 
 render();
+
+
+
